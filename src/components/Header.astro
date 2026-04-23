@@ -1,0 +1,109 @@
+---
+---
+
+<header class="navbar glass-nav">
+  <div class="nav-container">
+    <a href="#home" class="logo"><span class="typewriter"></span><span class="text-gradient">.</span></a>
+    
+    <nav class="nav-links">
+      <a href="#experience">Experiencia</a>
+      <a href="#skills">Habilidades</a>
+      <a href="#projects">Proyectos</a>
+      <a href="#education">Educación</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 1100px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  .glass-nav {
+    background: rgba(15, 15, 23, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.8rem;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--text-main);
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--text-main);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  /* Responsive minimalista para movil */
+  @media (max-width: 640px) {
+    .navbar {
+      top: 1rem;
+      width: calc(100% - 2rem);
+    }
+    .nav-container {
+      justify-content: center;
+      padding: 0.8rem 1rem;
+    }
+    .logo {
+      display: none; /* Ocultamos el logo en móvil para dar espacio a los links */
+    }
+    .nav-links {
+      gap: 1.2rem;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<script>
+  // Typewriter simple y limpio — configura el texto aquí si cambia el logo
+  const TEXT = 'CR';
+  const el = document.querySelector('.typewriter');
+  let i = 0;
+
+  function type() {
+    if (i <= TEXT.length) {
+      el.textContent = TEXT.slice(0, i);
+      i++;
+      setTimeout(type, 180);
+    }
+  }
+
+  type();
+</script>

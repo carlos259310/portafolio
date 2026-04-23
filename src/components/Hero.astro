@@ -1,0 +1,118 @@
+---
+import { cvData } from '../data/cv.js';
+---
+
+<section class="hero text-center" id="home">
+  <div class="container container-hero relative">
+    <!-- Adorno de fondo -->
+    <div class="glow-blob"></div>
+
+    
+    <h1 class="hero-title">Hola, soy <br/> <span class="text-gradient">{cvData.personalInfo.name}</span></h1>
+    <h2 class="hero-subtitle">{cvData.personalInfo.title}</h2>
+    
+    <div class="location-badge">📍 {cvData.personalInfo.location}</div>
+    
+    <p class="hero-summary glass">
+      {cvData.summary}
+    </p>
+
+    <div class="hero-actions">
+      <a href={cvData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" class="btn-primary">
+        LinkedIn
+      </a>
+      <a href="https://wa.me/573023055402?text=Hola%20Carlos,%20he%20visto%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contactarte." target="_blank" rel="noopener noreferrer" class="btn-secondary whatsapp-btn">
+        WhatsApp
+      </a>
+      <a href={cvData.personalInfo.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+        GitHub
+      </a>
+      <a href={`mailto:${cvData.personalInfo.email}`} class="btn-secondary">
+        Envíame un Email
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2rem;
+    position: relative;
+  }
+  .container-hero {
+    z-index: 2;
+  }
+  .glow-blob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 60vw;
+    max-width: 600px;
+    max-height: 600px;
+    background: radial-gradient(circle, rgba(112, 0, 255, 0.15) 0%, rgba(0, 240, 255, 0) 70%);
+    z-index: -1;
+    filter: blur(40px);
+    pointer-events: none;
+    animation: pulse 8s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  }
+
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .location-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-summary {
+    font-size: 1.05rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    padding: 1.5rem;
+    color: var(--text-main);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .whatsapp-btn:hover {
+    border-color: #25D366;
+    color: #25D366;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+  }
+</style>

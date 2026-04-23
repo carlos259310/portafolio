@@ -1,0 +1,112 @@
+---
+import { projectsData } from '../data/projects.js';
+---
+
+<section id="projects" class="container">
+  <h2 class="section-title">Proyectos <span class="text-gradient">Destacados</span></h2>
+  
+  <div class="projects-grid">
+    {projectsData.map(project => (
+      <div class="project-card glass">
+        <div class="project-content">
+          <h3 class="project-title">{project.title}</h3>
+          <p class="project-description">{project.description}</p>
+          <div class="project-tech">
+            {project.tech.map(tech => (
+              <span class="tech-pill">{tech}</span>
+            ))}
+          </div>
+          <div class="project-links">
+            <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-primary">Visitar Proyecto</a>
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">Código</a>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    /* Glow effect on hover */
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 15px 30px rgba(0, 240, 255, 0.15);
+  }
+
+  .project-content {
+    padding: 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    z-index: 2;
+  }
+
+  .project-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  }
+
+  .project-description {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tech-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    background: rgba(0, 240, 255, 0.1);
+    color: #00f0ff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 240, 255, 0.2);
+  }
+
+  .project-links {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+  
+  .project-links a {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex: 1;
+    text-align: center;
+    border-radius: 12px;
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { cvData } from '../data/cv.js';
+---
+
+<footer class="glass-footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <h2>{cvData.personalInfo.name}</h2>
+      <p class="footer-title text-gradient">Ingeniero de Desarrollo & Software Full Stack</p>
+    </div>
+    
+    <div class="footer-links">
+      <a href={cvData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={cvData.personalInfo.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://wa.me/573023055402" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; {new Date().getFullYear()} {cvData.personalInfo.name}. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<style>
+  .glass-footer {
+    margin-top: 4rem;
+    background: rgba(15, 15, 23, 0.6);
+    border-top: 1px solid rgba(0, 240, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 4rem 0 2rem;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+    }
+    .footer-links {
+      justify-content: center;
+    }
+  }
+</style>

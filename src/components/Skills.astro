@@ -1,0 +1,69 @@
+---
+import { cvData } from '../data/cv.js';
+---
+
+<section id="skills" class="container">
+  <h2 class="section-title">Habilidades <span class="text-gradient">Técnicas</span></h2>
+  
+  <div class="skills-grid">
+    {Object.entries(cvData.skills).map(([category, items]) => (
+      <div class="skill-category glass">
+        <h3 class="category-title">{category}</h3>
+        <div class="skills-list">
+          {items.map(skill => (
+            <span class="skill-pill">{skill}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill-category {
+    padding: 2rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .skill-category:hover {
+    transform: translateY(-5px);
+  }
+
+  .category-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    text-transform: capitalize;
+  }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .skill-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #e2e8f0;
+    transition: all 0.3s ease;
+  }
+
+  .skill-pill:hover {
+    background: rgba(112, 0, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.5);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 240, 255, 0.2);
+  }
+</style>

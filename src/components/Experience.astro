@@ -1,0 +1,144 @@
+---
+import { cvData } from '../data/cv.js';
+---
+
+<section id="experience" class="container">
+  <h2 class="section-title">Experiencia <span class="text-gradient">Profesional</span></h2>
+  
+  <div class="timeline">
+    {cvData.experience.map((job, index) => (
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content glass">
+          <div class="job-header">
+            <h3 class="job-role">{job.role}</h3>
+            <span class="job-period">{job.period}</span>
+          </div>
+          <h4 class="job-company">{job.company} — {job.location}</h4>
+          
+          <ul class="job-achievements">
+            {job.achievements.map((achievement) => (
+              <li>{achievement}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 2rem;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    opacity: 0.3;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 1.5rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 2px solid var(--primary);
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px var(--primary-glow);
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-item:hover .timeline-dot {
+    background: var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+  }
+
+  .timeline-content {
+    padding: 1.5rem;
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .job-role {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .job-period {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .job-company {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .job-achievements {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .job-achievements li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+  }
+
+  .job-achievements li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    .job-header {
+      flex-direction: column;
+    }
+  }
+</style>

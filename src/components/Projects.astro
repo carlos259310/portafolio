@@ -1,25 +1,39 @@
 ---
-import { projectsData } from '../data/projects.js';
+import { getLang, useTranslations } from '../i18n/utils';
+import { getProjectsData } from '../i18n/cv';
+
+const lang     = getLang(Astro.currentLocale);
+const t        = useTranslations(lang);
+const projects = getProjectsData(lang);
 ---
 
 <section id="projects" class="container">
-  <h2 class="section-title">Proyectos <span class="text-gradient">Destacados</span></h2>
-  
+  <h2 class="section-title reveal">{t('proj.title')} <span class="text-gradient">{t('proj.highlight')}</span></h2>
+
   <div class="projects-grid">
-    {projectsData.map(project => (
-      <div class="project-card glass">
+    {projects.map((project, index) => (
+      <div class={`project-card glass reveal reveal-delay-${Math.min(index + 1, 6)}`}>
+        <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
+
         <div class="project-content">
           <h3 class="project-title">{project.title}</h3>
           <p class="project-description">{project.description}</p>
+
           <div class="project-tech">
             {project.tech.map(tech => (
               <span class="tech-pill">{tech}</span>
             ))}
           </div>
+
           <div class="project-links">
-            <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-primary">Visitar Proyecto</a>
+            <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-primary">
+              {t('proj.visit')}
+            </a>
+
             {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">Código</a>
+              <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                {t('proj.code')}
+              </a>
             )}
           </div>
         </div>
@@ -31,47 +45,76 @@ import { projectsData } from '../data/projects.js';
 <style>
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
   }
 
   .project-card {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 0;
     position: relative;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    /* Glow effect on hover */
+    overflow: hidden;
     transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   }
 
-  .project-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(0, 240, 255, 0.4);
-    box-shadow: 0 15px 30px rgba(0, 240, 255, 0.15);
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
   }
 
+  .project-card:hover::before { opacity: 1; }
+
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 240, 255, 0.25);
+    box-shadow: 0 16px 40px rgba(0, 240, 255, 0.1);
+  }
+
+  .project-number {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--number-ghost);
+    line-height: 1;
+    user-select: none;
+    z-index: 0;
+    transition: color 0.3s ease;
+  }
+
+  .project-card:hover .project-number { color: var(--number-ghost-hover); }
+
   .project-content {
-    padding: 1.5rem 1.5rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    gap: 0;
+    position: relative;
     z-index: 2;
   }
 
   .project-title {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-main);
+    transition: color 0.3s ease;
   }
+
+  .project-card:hover .project-title { color: var(--primary); }
 
   .project-description {
     color: var(--text-muted);
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
     flex-grow: 1;
   }
 
@@ -83,30 +126,26 @@ import { projectsData } from '../data/projects.js';
   }
 
   .tech-pill {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-family: var(--font-sans);
-    background: rgba(0, 240, 255, 0.1);
-    color: #00f0ff;
-    padding: 0.4rem 0.8rem;
+    background: rgba(0, 240, 255, 0.07);
+    color: var(--primary);
+    padding: 0.28rem 0.7rem;
     border-radius: 9999px;
-    border: 1px solid rgba(0, 240, 255, 0.2);
+    border: 1px solid rgba(0, 240, 255, 0.15);
   }
 
   .project-links {
     display: flex;
-    gap: 1.2rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
     margin-top: auto;
   }
-  
-  .project-links a {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    flex: 1;
-    text-align: center;
+
+  .project-links .btn-primary,
+  .project-links .btn-secondary {
+    padding: 0.65rem 1.2rem;
+    font-size: 0.88rem;
     border-radius: 12px;
   }
 </style>

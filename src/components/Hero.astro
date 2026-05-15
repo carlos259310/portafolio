@@ -1,37 +1,56 @@
 ---
-import { cvData } from '../data/cv.js';
+import { getLang, useTranslations } from '../i18n/utils';
+import { getCvData } from '../i18n/cv';
+
+const lang = getLang(Astro.currentLocale);
+const t    = useTranslations(lang);
+const cv   = getCvData(lang);
 ---
 
-<section class="hero text-center" id="home">
-  <div class="container container-hero relative">
-    <!-- Adorno de fondo -->
-    <div class="glow-blob"></div>
+<section class="hero" id="home">
+  <div class="glow-blob"></div>
 
-    
-    <h1 class="hero-title">Hola, soy <br/> <span class="text-gradient">{cvData.personalInfo.name}</span></h1>
-    <h2 class="hero-subtitle">{cvData.personalInfo.title}</h2>
-    
-    <div class="location-badge">📍 {cvData.personalInfo.location}</div>
-    
-    <p class="hero-summary glass">
-      {cvData.summary}
-    </p>
+  <div class="container hero-grid">
 
-    <div class="hero-actions">
-      <a href={cvData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" class="btn-primary">
-        LinkedIn
-      </a>
-      <a href="https://wa.me/573023055402?text=Hola%20Carlos,%20he%20visto%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contactarte." target="_blank" rel="noopener noreferrer" class="btn-secondary whatsapp-btn">
-        WhatsApp
-      </a>
-      <a href={cvData.personalInfo.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">
-        GitHub
-      </a>
-      <a href={`mailto:${cvData.personalInfo.email}`} class="btn-secondary">
-        Envíame un Email
-      </a>
+    <!-- Texto izquierda -->
+    <div class="content-col">
+      <h1 class="hero-title reveal">
+        {t('hero.greeting')}<br/>
+        <span class="text-gradient">{cv.personalInfo.name}</span>
+      </h1>
+
+      <h2 class="hero-subtitle reveal reveal-delay-1">{cv.personalInfo.title}</h2>
+      <p  class="location      reveal reveal-delay-1">{t('hero.location')}</p>
+      <p  class="hero-summary  reveal reveal-delay-2">{cv.summary}</p>
+
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href={cv.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" class="btn-primary">
+          {t('hero.linkedin')}
+        </a>
+        <a href="https://wa.me/573023055402?text=Hola%20Carlos,%20he%20visto%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contactarte."
+           target="_blank" rel="noopener noreferrer" class="btn-secondary whatsapp-btn">
+          {t('hero.whatsapp')}
+        </a>
+        <a href={cv.personalInfo.github} target="_blank" rel="noopener noreferrer" class="btn-secondary">
+          {t('hero.github')}
+        </a>
+        <a href={`mailto:${cv.personalInfo.email}`} class="btn-secondary">
+          {t('hero.email')}
+        </a>
+      </div>
     </div>
+
+    <!-- Ilustración derecha -->
+    <div class="banner-col reveal reveal-delay-2">
+      <div class="banner-frame">
+        <img src="/banner.jpg" alt="Carlos Rodríguez – Full Stack Developer" class="banner-img" />
+        <div class="banner-glow"></div>
+      </div>
+    </div>
+
   </div>
+
+  <div class="scroll-hint" aria-hidden="true">↓</div>
 </section>
 
 <style>
@@ -39,80 +58,163 @@ import { cvData } from '../data/cv.js';
     min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-top: 2rem;
+    padding-top: 7rem;
+    padding-bottom: 5rem;
     position: relative;
+    overflow: hidden;
   }
-  .container-hero {
-    z-index: 2;
-  }
+
   .glow-blob {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vw;
-    max-width: 600px;
-    max-height: 600px;
-    background: radial-gradient(circle, rgba(112, 0, 255, 0.15) 0%, rgba(0, 240, 255, 0) 70%);
-    z-index: -1;
-    filter: blur(40px);
+    right: -10%;
+    transform: translateY(-50%);
+    width: 55vw;
+    max-width: 700px;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(112,0,255,0.14) 0%, transparent 65%);
+    filter: blur(70px);
     pointer-events: none;
-    animation: pulse 8s ease-in-out infinite alternate;
-  }
-  
-  @keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    z-index: 0;
+    animation: pulse 10s ease-in-out infinite alternate;
   }
 
+  @keyframes pulse {
+    0%   { opacity: 0.5; transform: translateY(-50%) scale(1); }
+    100% { opacity: 1;   transform: translateY(-50%) scale(1.15); }
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .content-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    margin-bottom: 0.5rem;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    margin-bottom: 0.65rem;
     line-height: 1.1;
   }
 
   .hero-subtitle {
-    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-size: clamp(0.82rem, 1.3vw, 0.96rem);
     color: var(--text-muted);
     font-family: var(--font-sans);
     font-weight: 400;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
   }
 
-  .location-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 9999px;
-    font-size: 0.95rem;
-    color: #cbd5e1;
-    margin-bottom: 1.5rem;
+  .location {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 1.4rem;
   }
 
   .hero-summary {
-    font-size: 1.05rem;
-    max-width: 800px;
-    margin: 0 auto 2rem;
-    padding: 1.5rem;
-    color: var(--text-main);
-    line-height: 1.6;
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    max-width: 520px;
   }
 
   .hero-actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
+    gap: 0.65rem;
     flex-wrap: wrap;
   }
 
   .whatsapp-btn:hover {
     border-color: #25D366;
     color: #25D366;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+    box-shadow: 0 4px 15px rgba(37,211,102,0.18);
+  }
+
+  /* ── Banner ──────────────────────────────────────── */
+  .banner-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .banner-frame {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(0,240,255,0.12);
+    box-shadow: 0 0 0 1px rgba(112,0,255,0.1), 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,240,255,0.08);
+  }
+
+  .banner-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    mask-image: linear-gradient(to bottom, black 70%, rgba(0,0,0,0.4) 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, rgba(0,0,0,0.4) 90%, transparent 100%);
+  }
+
+  .banner-glow {
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,240,255,0.25), transparent 70%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+
+  /* ── Scroll hint ─────────────────────────────────── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3rem;
+    color: var(--text-muted);
+    opacity: 0.4;
+    animation: bounce-y 2.5s ease-in-out infinite;
+    user-select: none;
+    z-index: 2;
+  }
+
+  @keyframes bounce-y {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(7px); }
+  }
+
+  /* ── Responsive ──────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr 380px; gap: 3rem; }
+  }
+
+  @media (max-width: 800px) {
+    .hero { padding-top: 6rem; padding-bottom: 4rem; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
+    .content-col { align-items: center; order: 2; }
+    .banner-col  { order: 1; }
+    .hero-summary { max-width: 560px; }
+    .hero-actions { justify-content: center; }
+    .banner-frame { max-width: 480px; margin: 0 auto; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding-top: 5rem; padding-bottom: 3.5rem; }
+    .hero-grid { gap: 2rem; }
+    .hero-actions a { padding: 0.7rem 1.3rem; font-size: 0.88rem; }
+    .banner-frame { max-width: 340px; }
+    .scroll-hint { display: none; }
   }
 </style>

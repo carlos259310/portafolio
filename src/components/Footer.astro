@@ -1,95 +1,167 @@
 ---
-import { cvData } from '../data/cv.js';
+import { getLang, useTranslations } from '../i18n/utils';
+import { getCvData } from '../i18n/cv';
+
+const lang = getLang(Astro.currentLocale);
+const t    = useTranslations(lang);
+const cv   = getCvData(lang);
 ---
 
-<footer class="glass-footer">
-  <div class="container footer-content">
-    <div class="footer-brand">
-      <h2>{cvData.personalInfo.name}</h2>
-      <p class="footer-title text-gradient">Ingeniero de Desarrollo & Software Full Stack</p>
+<footer class="site-footer">
+
+  <!-- Top gradient accent -->
+  <div class="footer-top-line"></div>
+
+  <div class="footer-inner">
+
+    <!-- Ambient glow behind name -->
+    <div class="footer-glow" aria-hidden="true"></div>
+
+    <!-- Name -->
+    <h2 class="footer-name text-gradient">{cv.personalInfo.name}</h2>
+
+    <!-- Role -->
+    <p class="footer-role">{t('footer.role')}</p>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <span class="copyright">&copy; <span id="footerYear"></span> {cv.personalInfo.name}. {t('footer.rights')}</span>
+      <span class="divider" aria-hidden="true">·</span>
+      <span class="built-with">{t('footer.built')}</span>
     </div>
-    
-    <div class="footer-links">
-      <a href={cvData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href={cvData.personalInfo.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://wa.me/573023055402" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-    </div>
-  </div>
-  
-  <div class="footer-bottom">
-    <p>&copy; {new Date().getFullYear()} {cvData.personalInfo.name}. Todos los derechos reservados.</p>
+
   </div>
 </footer>
 
 <style>
-  .glass-footer {
+  .site-footer {
     margin-top: 4rem;
-    background: rgba(15, 15, 23, 0.6);
-    border-top: 1px solid rgba(0, 240, 255, 0.1);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    padding: 4rem 0 2rem;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    background: var(--footer-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: background 0.35s ease;
+    overflow: hidden;
   }
 
-  .footer-content {
+  /* Gradient accent bar */
+  .footer-top-line {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--secondary) 20%,
+      var(--primary) 50%,
+      var(--secondary) 80%,
+      transparent 100%
+    );
+    opacity: 0.6;
+  }
+
+  /* Main container — everything centered */
+  .footer-inner {
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  .footer-brand h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-  }
-
-  .footer-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .footer-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.05rem;
-    transition: all 0.3s ease;
-  }
-
-  .footer-links a:hover {
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
-    transform: translateY(-2px);
-  }
-
-  .footer-bottom {
     text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    padding: 4rem 1.5rem 2.5rem;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-      justify-content: center;
-    }
-    .footer-links {
-      justify-content: center;
-    }
+  /* Ambient glow blob behind the name */
+  .footer-glow {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    max-width: 600px;
+    height: 200px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(112, 0, 255, 0.12) 0%,
+      rgba(0, 240, 255, 0.06) 50%,
+      transparent 70%
+    );
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  [data-theme="light"] .footer-glow {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(124, 58, 237, 0.08) 0%,
+      rgba(2, 132, 199, 0.04) 50%,
+      transparent 70%
+    );
+  }
+
+  /* Large gradient name — the visual anchor */
+  .footer-name {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  /* Role — uppercase, muted, spaced */
+  .footer-role {
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2.75rem;
+  }
+
+  .dot {
+    color: var(--border-medium);
+    font-size: 0.9rem;
+    opacity: 0.55;
+  }
+
+  /* Bottom copyright bar */
+  .footer-bottom {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .copyright, .built-with {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    opacity: 0.55;
+  }
+
+  .divider {
+    color: var(--border-medium);
+    font-size: 0.9rem;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 480px) {
+    .footer-inner { padding: 3rem 1.5rem 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.3rem; }
+    .divider { display: none; }
   }
 </style>
+
+<script>
+  const yearEl = document.getElementById('footerYear');
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+</script>

@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import Experience from '../../components/Experience.astro';
+import Skills from '../../components/Skills.astro';
+import Projects from '../../components/Projects.astro';
+import Education from '../../components/Education.astro';
+import CvDownload from '../../components/CvDownload.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Carlos Rodríguez | Full Stack Developer">
+  <Header />
+  <main>
+    <Hero />
+    <Experience />
+    <Skills />
+    <Projects />
+    <Education />
+    <CvDownload />
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    width: 100%;
+  }
+</style>

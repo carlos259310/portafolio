@@ -1,56 +1,128 @@
 ---
+import { getLang, useTranslations } from '../i18n/utils';
+
+const lang   = getLang(Astro.currentLocale);
+const t      = useTranslations(lang);
+const altUrl = lang === 'es' ? '/en/' : '/';
+const altLbl = lang === 'es' ? 'EN' : 'ES';
 ---
 
-<header class="navbar glass-nav">
-  <div class="nav-container">
-    <a href="#home" class="logo"><span class="typewriter"></span><span class="text-gradient">.</span></a>
-    
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href={lang === 'es' ? '/' : '/en/'} class="logo">
+      <span class="typewriter"></span><span class="text-gradient">.</span>
+    </a>
+
     <nav class="nav-links">
-      <a href="#experience">Experiencia</a>
-      <a href="#skills">Habilidades</a>
-      <a href="#projects">Proyectos</a>
-      <a href="#education">Educación</a>
+      <a href="#experience" data-section="experience">{t('nav.experience')}</a>
+      <a href="#skills"     data-section="skills"    >{t('nav.skills')}</a>
+      <a href="#projects"   data-section="projects"  >{t('nav.projects')}</a>
+      <a href="#education"  data-section="education" >{t('nav.education')}</a>
     </nav>
+
+    <div class="nav-right">
+      <!-- Language switcher -->
+      <div class="lang-switch" role="navigation" aria-label="Cambiar idioma">
+        <span class="lang-active">{lang.toUpperCase()}</span>
+        <span class="lang-sep">|</span>
+        <a href={altUrl} class="lang-alt" hreflang={lang === 'es' ? 'en' : 'es'}>{altLbl}</a>
+      </div>
+
+      <!-- Theme toggle switch -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
+<div class="mobile-overlay" id="mobileOverlay" aria-hidden="true">
+  <button class="overlay-close" id="overlayClose" aria-label="Cerrar menú">✕</button>
+  <nav class="mobile-nav">
+    <a href="#experience" class="mobile-link">{t('nav.experience')}</a>
+    <a href="#skills"     class="mobile-link">{t('nav.skills')}</a>
+    <a href="#projects"   class="mobile-link">{t('nav.projects')}</a>
+    <a href="#education"  class="mobile-link">{t('nav.education')}</a>
+
+    <div class="mobile-controls">
+      <!-- Language -->
+      <div class="mobile-lang">
+        <span class="lang-active">{lang.toUpperCase()}</span>
+        <span class="lang-sep">|</span>
+        <a href={altUrl} hreflang={lang === 'es' ? 'en' : 'es'}>{altLbl}</a>
+      </div>
+      <!-- Theme switch (mobile) -->
+      <button class="mobile-theme-toggle" id="themeToggleMobile" aria-label="Cambiar tema">
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+        <span class="mobile-theme-label"></span>
+      </button>
+    </div>
+  </nav>
+</div>
+
 <style>
+  /* ── Navbar ────────────────────────────────────────── */
   .navbar {
     position: fixed;
-    top: 1.5rem;
+    top: 1.25rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 95%;
-    max-width: 1100px;
+    width: calc(100% - 3rem);
+    max-width: 1200px;
     z-index: 1000;
-    transition: all 0.3s ease;
-  }
-  
-  .glass-nav {
-    background: rgba(15, 15, 23, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--nav-border);
     border-radius: 9999px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 30px var(--nav-shadow);
+    transition:
+      top 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      padding 0.3s ease;
   }
 
-  .nav-container {
+  .navbar.scrolled {
+    top: 0.5rem;
+    background: var(--nav-bg-scrolled);
+    box-shadow: 0 8px 40px var(--nav-shadow), 0 1px 0 var(--nav-border);
+  }
+
+  .navbar.scrolled .nav-inner {
+    padding: 0.55rem 1.5rem;
+  }
+
+  .nav-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.8rem 1.8rem;
+    padding: 0.75rem 1.5rem;
+    gap: 1rem;
+    transition: padding 0.3s ease;
   }
 
+  /* ── Logo ──────────────────────────────────────────── */
   .logo {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     text-decoration: none;
     color: var(--text-main);
     letter-spacing: 1px;
+    flex-shrink: 0;
   }
 
+  /* ── Desktop nav links ─────────────────────────────── */
   .nav-links {
     display: flex;
     gap: 2rem;
@@ -59,51 +131,331 @@
   .nav-links a {
     text-decoration: none;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.25s ease;
+    position: relative;
+    padding-bottom: 3px;
   }
 
-  .nav-links a:hover {
-    color: var(--text-main);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 9999px;
+    transition: width 0.3s ease;
   }
 
-  /* Responsive minimalista para movil */
-  @media (max-width: 640px) {
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--text-main); }
+  .nav-links a.active::after,
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── Right cluster ─────────────────────────────────── */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Language switcher ─────────────────────────────── */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .lang-active { color: var(--primary); }
+  .lang-sep    { color: rgba(128,128,128,0.4); }
+
+  .lang-alt {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .lang-alt:hover { color: var(--text-main); }
+
+  /* ── iOS theme toggle switch ───────────────────────── */
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    border-radius: 9999px;
+    transition: opacity 0.2s ease;
+  }
+
+  .theme-toggle:hover { opacity: 0.85; }
+
+  .toggle-track {
+    display: block;
+    width: 40px;
+    height: 22px;
+    border-radius: 9999px;
+    background: var(--border-medium);
+    border: 1.5px solid var(--nav-border);
+    position: relative;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  [data-theme="light"] .toggle-track {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  }
+
+  [data-theme="light"] .toggle-thumb {
+    transform: translateX(18px);
+    background: #fff;
+  }
+
+  /* ── Hamburger ─────────────────────────────────────── */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+    position: relative;
+    z-index: 1002;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-main);
+    border-radius: 9999px;
+    transition: all 0.28s ease;
+    transform-origin: center;
+  }
+
+  .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Mobile overlay ────────────────────────────────── */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background 0.35s ease;
+  }
+
+  /* ── Overlay close button ──────────────────────────── */
+  .overlay-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: 1px solid var(--border-medium);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .overlay-close:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .mobile-overlay.open { opacity: 1; visibility: visible; }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 0.4rem;
+  }
+
+  .mobile-link {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 0.55rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-link:hover {
+    color: var(--primary);
+    background: var(--surface-subtle);
+  }
+
+  /* ── Mobile controls row (lang + theme) ────────────── */
+  .mobile-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .mobile-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 9999px;
+    color: var(--text-muted);
+  }
+
+  .mobile-lang a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .mobile-lang a:hover { color: var(--primary); }
+
+  .mobile-theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: none;
+    border: 1px solid var(--border-medium);
+    border-radius: 9999px;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    transition: all 0.2s ease;
+  }
+
+  .mobile-theme-toggle:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .mobile-theme-label { font-size: 0.9rem; }
+
+  [data-theme="dark"]  .mobile-theme-label::before { content: 'Modo claro'; }
+  [data-theme="light"] .mobile-theme-label::before { content: 'Modo oscuro'; }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 768px) {
     .navbar {
       top: 1rem;
       width: calc(100% - 2rem);
     }
-    .nav-container {
-      justify-content: center;
-      padding: 0.8rem 1rem;
-    }
-    .logo {
-      display: none; /* Ocultamos el logo en móvil para dar espacio a los links */
-    }
-    .nav-links {
-      gap: 1.2rem;
-    }
-    .nav-links a {
-      font-size: 0.85rem;
-    }
+
+    .nav-links    { display: none; }
+    .theme-toggle { display: none; }
+    .menu-toggle  { display: flex; }
+    .mobile-overlay { display: block; }
+    .lang-switch  { display: none; }
   }
 </style>
 
 <script>
-  // Typewriter simple y limpio — configura el texto aquí si cambia el logo
-  const TEXT = 'CR';
-  const el = document.querySelector('.typewriter');
-  let i = 0;
-
-  function type() {
-    if (i <= TEXT.length) {
-      el.textContent = TEXT.slice(0, i);
-      i++;
-      setTimeout(type, 180);
-    }
+  /* ── Typewriter ──────────────────────────────────────── */
+  const el = document.querySelector<HTMLElement>('.typewriter');
+  if (el) {
+    const TEXT = 'CR'; let i = 0;
+    (function type() { if (i <= TEXT.length) { el.textContent = TEXT.slice(0, i++); setTimeout(type, 180); } })();
   }
 
-  type();
+  /* ── Active section highlight ────────────────────────── */
+  const sectionObs = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting)
+        document.querySelectorAll<HTMLAnchorElement>('.nav-links a[data-section]')
+          .forEach((l) => l.classList.toggle('active', l.dataset.section === e.target.id));
+    }),
+    { rootMargin: '-40% 0px -50% 0px' }
+  );
+  document.querySelectorAll('section[id]').forEach((s) => sectionObs.observe(s));
+
+  /* ── Navbar shrink on scroll ─────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar?.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* ── Theme toggle ────────────────────────────────────── */
+  function applyTheme(next: string) {
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  }
+
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') ?? 'dark';
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
+  document.getElementById('themeToggleMobile')?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') ?? 'dark';
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ── Mobile menu ─────────────────────────────────────── */
+  const toggle  = document.getElementById('menuToggle');
+  const overlay = document.getElementById('mobileOverlay');
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.classList.toggle('open');
+    overlay?.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    overlay?.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  function closeMenu() {
+    toggle?.classList.remove('open');
+    overlay?.classList.remove('open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    overlay?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.mobile-link').forEach((link) =>
+    link.addEventListener('click', closeMenu)
+  );
+
+  document.getElementById('overlayClose')?.addEventListener('click', closeMenu);
 </script>

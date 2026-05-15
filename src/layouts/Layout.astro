@@ -1,24 +1,120 @@
 ---
 import '../styles/global.css';
+import { getLang } from '../i18n/utils';
 
-interface Props {
-	title: string;
-}
-
+interface Props { title: string }
 const { title } = Astro.props;
+const lang = getLang(Astro.currentLocale);
 ---
 
 <!doctype html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Portafolio Web de Carlos Rodríguez - Desarrollador Web Full Stack" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Portfolio – Carlos Rodríguez, Full Stack Developer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050508" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Full Stack Developer | C# .NET · Python · PHP Laravel · React" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <title>{title}</title>
+    <!-- Theme detection — must run before paint to prevent flash of wrong theme -->
+    <script is:inline>
+      (function () {
+        var saved  = localStorage.getItem('theme');
+        var osPref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', saved || osPref);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Cursor glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <!-- Scroll progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <slot />
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba">↑</button>
+  </body>
 </html>
+
+<script>
+  /* ── Scroll-reveal ─────────────────────────────────── */
+  const revealObs = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    }),
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+
+  /* ── Back to top ───────────────────────────────────── */
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => btn?.classList.toggle('visible', window.scrollY > 300), { passive: true });
+  btn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  /* ── Scroll progress bar ───────────────────────────── */
+  const progressBar = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', () => {
+    const total   = document.documentElement.scrollHeight - window.innerHeight;
+    const current = window.scrollY;
+    if (progressBar) progressBar.style.width = `${(current / total) * 100}%`;
+  }, { passive: true });
+
+  /* ── Cursor glow ───────────────────────────────────── */
+  const glow = document.getElementById('cursorGlow');
+  if (glow && window.matchMedia('(pointer: fine)').matches) {
+    let mx = -999, my = -999;
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      glow.style.left = `${mx}px`;
+      glow.style.top  = `${my}px`;
+    }, { passive: true });
+    document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { glow.style.opacity = '1'; });
+  } else if (glow) {
+    glow.style.display = 'none';
+  }
+
+  /* ── Glass spotlight (mouse-tracking gradient) ─────── */
+  function initSpotlight() {
+    document.querySelectorAll<HTMLElement>('.glass').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
+  }
+  initSpotlight();
+
+  /* ── Count-up for stat numbers ─────────────────────── */
+  function countUp(el: HTMLElement) {
+    const raw   = el.textContent?.trim() ?? '';
+    const num   = parseFloat(raw.replace(/[^0-9.]/g, ''));
+    const suffix = raw.replace(/[0-9.]/g, '');
+    if (isNaN(num)) return;
+    const duration = 1400;
+    const start    = performance.now();
+    function frame(now: number) {
+      const progress = Math.min((now - start) / duration, 1);
+      const ease     = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+      el.textContent = Math.round(num * ease) + suffix;
+      if (progress < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        countUp(e.target as HTMLElement);
+        statObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-value').forEach((el) => statObs.observe(el));
+</script>

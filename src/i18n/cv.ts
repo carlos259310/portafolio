@@ -52,7 +52,7 @@ const personalInfo = {
 };
 
 const skills = {
-  Backend:       ['C# .NET', 'Python', 'PHP Laravel 11', 'Node.js', 'Java Spring Boot', 'APIs REST'],
+  Backend:       ['C# .NET', 'Python', 'PHP Laravel 11', 'Node.js', 'NestJS', 'Java Spring Boot', 'APIs REST'],
   Frontend:      ['React', 'Vite', 'Angular', 'TypeScript', 'JavaScript', 'Blade', 'HTML5/CSS3'],
   Database:      ['SQL Server', 'MySQL', 'PostgreSQL', 'SAP HANA SQL', 'T-SQL', 'PL/SQL'],
   Analytics:     ['Power BI', 'Crystal Reports', 'ETL', 'Dashboards'],
@@ -83,6 +83,7 @@ const experienceEs: ExperienceItem[] = [
       'Implementé pasarela de pagos PSE con PlaceToPay para el Instituto de Tránsito de Girón, incluyendo webhooks, validación de estados y reconciliación bancaria.',
       'Desarrollé plataformas ciudadanas con PHP Laravel 11 y React + Vite; APIs REST con autenticación por tokens y middlewares de autorización.',
       'Administración de MySQL y despliegue continuo en entornos Linux.',
+      'Construcción de componentes React reutilizables con Context API y hooks personalizados; diseño responsive e integración con servicios externos.',
     ],
   },
   {
@@ -123,6 +124,7 @@ const experienceEs: ExperienceItem[] = [
     period:   'Sep 2022 – Abr 2023',
     achievements: [
       'Aplicaciones web con C# .NET, Angular y JavaScript; bases de datos SQL Server y PostgreSQL.',
+      'Desarrollo de servicios backend con Node.js: APIs REST, manejo de eventos y procesamiento asíncrono; uso de NestJS como framework para arquitectura modular, inyección de dependencias y TypeScript.',
       'Pruebas de calidad y documentación técnica.',
     ],
   },
@@ -138,6 +140,7 @@ const experienceEn: ExperienceItem[] = [
       'Implemented PSE payment gateway with PlaceToPay for the Girón Transit Institute, including webhooks, status validation, and bank reconciliation.',
       'Developed citizen-facing platforms with PHP Laravel 11 and React + Vite; REST APIs with token authentication and authorization middleware.',
       'MySQL administration and continuous deployment in Linux environments.',
+      'Built reusable React components with Context API and custom hooks; responsive design and integration with external services.',
     ],
   },
   {
@@ -178,6 +181,7 @@ const experienceEn: ExperienceItem[] = [
     period:   'Sep 2022 – Apr 2023',
     achievements: [
       'Web applications with C# .NET, Angular, and JavaScript; SQL Server and PostgreSQL databases.',
+      'Backend service development with Node.js: REST APIs, event handling, and asynchronous processing; NestJS as framework for modular architecture, dependency injection, and TypeScript.',
       'Quality testing and technical documentation.',
     ],
   },
